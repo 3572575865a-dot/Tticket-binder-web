@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ticket Binder · iPhone 16 Pro</title>
+  <style>
+    :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      display: grid;
+      place-items: center;
+      background: #ece9e1;
+      background-image: radial-gradient(circle at 50% 35%, #fffdf8 0, #ece9e1 68%);
+    }
+    .stage {
+      position: relative;
+      width: calc(var(--device-width, 402px) + 20px);
+      height: calc(var(--device-height, 874px) + 20px);
+      transform-origin: center;
+    }
+    .phone {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border: 10px solid #171817;
+      border-radius: 58px;
+      background: #fff;
+      box-shadow: 0 24px 68px rgba(31,30,27,.28), inset 0 0 0 1px rgba(255,255,255,.16);
+    }
+    iframe {
+      width: var(--device-width, 402px);
+      height: var(--device-height, 874px);
+      border: 0;
+      background: #fff;
+    }
+    .island {
+      position: absolute;
+      z-index: 4;
+      top: 29px;
+      left: 50%;
+      width: 124px;
+      height: 36px;
+      transform: translateX(-50%);
+      border-radius: 22px;
+      background: #090909;
+      pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+    .label {
+      position: absolute;
+      left: 50%;
+      bottom: -42px;
+      transform: translateX(-50%);
+      color: #66645e;
+      font-size: 12px;
+      letter-spacing: .12em;
+      white-space: nowrap;
+    }
+    @media (max-width: 470px) {
+      .label { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" id="stage" aria-label="iPhone 16 Pro preview">
+    <section class="phone">
+      <iframe id="preview" src="about:blank" title="Ticket Binder"></iframe>
+      <div class="island" aria-hidden="true"></div>
+    </section>
+    <div class="label" id="label">iPhone 16 Pro · 402 × 874</div>
+  </main>
+  <script>
+    const stage = document.getElementById('stage');
+    const query = new URLSearchParams(location.search);
+    const width = Math.max(280, Number(query.get('width')) || 402);
+    const height = Math.max(500, Number(query.get('height')) || 874);
+    const name = query.get('name') || 'iPhone 16 Pro';
+    const safeTop = Math.max(0, Number(query.get('safeTop') ?? 59));
+    const safeBottom = Math.max(0, Number(query.get('safeBottom') ?? 34));
+    document.documentElement.style.setProperty('--device-width', `${width}px`);
+    document.documentElement.style.setProperty('--device-height', `${height}px`);
+    document.getElementById('label').textContent = `${name} · ${width} × ${height}`;
+    const previewScreen = query.get('screen') === 'output' ? '&previewScreen=TicketOutput' : '';
+    const printerVariant = query.get('printerVariant') === 'physical' ? '&printerVariant=physical' : '';
+    const ticketAspect = Number(query.get('ticketAspect')) > 0 ? `&ticketAspect=${encodeURIComponent(query.get('ticketAspect'))}` : '';
+    const appRoot = location.protocol === 'file:' ? 'http://127.0.0.1:8081/' : '/';
+    document.getElementById('preview').src = `${appRoot}?simulatedDevice=${encodeURIComponent(name)}&homePreview=2&safeTop=${safeTop}&safeBottom=${safeBottom}${previewScreen}${printerVariant}${ticketAspect}`;
+    if (query.get('island') === '0') document.querySelector('.island').hidden = true;
+    const resize = () => {
+      const scale = Math.min(1, (innerWidth - 28) / (width + 20), (innerHeight - 36) / (height + 20));
+      stage.style.transform = `scale(${Math.max(.25, scale)})`;
+    };
+    addEventListener('resize', resize, { passive: true });
+    resize();
+  </script>
+</body>
+</html>
