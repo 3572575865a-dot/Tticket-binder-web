@@ -26,14 +26,14 @@
       overflow: hidden;
       border: 10px solid #171817;
       border-radius: 58px;
-      background: #fff;
+      background: #FAFAF8;
       box-shadow: 0 24px 68px rgba(31,30,27,.28), inset 0 0 0 1px rgba(255,255,255,.16);
     }
     iframe {
       width: var(--device-width, 402px);
       height: var(--device-height, 874px);
       border: 0;
-      background: #fff;
+      background: transparent;
     }
     .island {
       position: absolute;
@@ -85,7 +85,7 @@
     const previewScreen = query.get('screen') === 'output' ? '&previewScreen=TicketOutput' : '';
     const printerVariant = query.get('printerVariant') === 'physical' ? '&printerVariant=physical' : '';
     const ticketAspect = Number(query.get('ticketAspect')) > 0 ? `&ticketAspect=${encodeURIComponent(query.get('ticketAspect'))}` : '';
-    const appRoot = location.protocol === 'file:' ? 'http://127.0.0.1:8081/' : '/';
+    const appRoot = location.protocol === 'file:' ? 'http://127.0.0.1:8081/' : new URL('./', location.href).href;
     document.getElementById('preview').src = `${appRoot}?simulatedDevice=${encodeURIComponent(name)}&homePreview=2&safeTop=${safeTop}&safeBottom=${safeBottom}${previewScreen}${printerVariant}${ticketAspect}`;
     if (query.get('island') === '0') document.querySelector('.island').hidden = true;
     const resize = () => {
