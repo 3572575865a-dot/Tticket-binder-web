@@ -87,8 +87,9 @@
     const previewScreen = query.get('screen') === 'output' ? '&previewScreen=TicketOutput' : '';
     const printerVariant = query.get('printerVariant') === 'physical' ? '&printerVariant=physical' : '';
     const ticketAspect = Number(query.get('ticketAspect')) > 0 ? `&ticketAspect=${encodeURIComponent(query.get('ticketAspect'))}` : '';
+    const buildVersion = query.get('v') ? `&v=${encodeURIComponent(query.get('v'))}` : '';
     const appRoot = location.protocol === 'file:' ? 'http://127.0.0.1:8081/' : new URL('./', location.href).href;
-    document.getElementById('preview').src = `${appRoot}?simulatedDevice=${encodeURIComponent(name)}&homePreview=2&safeTop=${safeTop}&safeBottom=${safeBottom}${previewScreen}${printerVariant}${ticketAspect}`;
+    document.getElementById('preview').src = `${appRoot}?simulatedDevice=${encodeURIComponent(name)}&homePreview=2&safeTop=${safeTop}&safeBottom=${safeBottom}${previewScreen}${printerVariant}${ticketAspect}${buildVersion}`;
     if (query.get('island') === '0') document.querySelector('.island').hidden = true;
     const resize = () => {
       const scale = Math.min(1, (innerWidth - 28) / (width + 20), (innerHeight - 36) / (height + 20));
